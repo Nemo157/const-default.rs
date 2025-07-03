@@ -7,10 +7,6 @@
 )]
 #![cfg_attr(feature = "unstable", feature(const_fn_trait_bound))]
 #![cfg_attr(
-    all(feature = "unstable", feature = "enable-atomics"),
-    feature(cfg_target_has_atomic)
-)]
-#![cfg_attr(
     feature = "enable-atomics",
     allow(clippy::declare_interior_mutable_const)
 )]
@@ -200,7 +196,7 @@ macro_rules! impl_num {
             $(
                 #[cfg(feature = "enable-atomics")]
                 #[cfg_attr(feature = "unstable-docs", doc(cfg(any(feature = "default", feature = "enable-atomics"))))]
-                #[cfg_attr(feature = "unstable", cfg(target_has_atomic = $width))]
+                #[cfg(target_has_atomic = $width)]
                 impl ConstDefault for core::sync::atomic::$name {
                     const DEFAULT: Self = Self::new(ConstDefault::DEFAULT);
                 }
@@ -221,7 +217,7 @@ impl_num! {
     feature = "unstable-docs",
     doc(cfg(any(feature = "default", feature = "enable-atomics")))
 )]
-#[cfg_attr(feature = "unstable", cfg(target_has_atomic = "8"))]
+#[cfg(target_has_atomic = "8")]
 impl ConstDefault for core::sync::atomic::AtomicBool {
     const DEFAULT: Self = Self::new(ConstDefault::DEFAULT);
 }
@@ -231,7 +227,7 @@ impl ConstDefault for core::sync::atomic::AtomicBool {
     feature = "unstable-docs",
     doc(cfg(any(feature = "default", feature = "enable-atomics")))
 )]
-#[cfg_attr(feature = "unstable", cfg(target_has_atomic = "ptr"))]
+#[cfg(target_has_atomic = "ptr")]
 impl<T> ConstDefault for core::sync::atomic::AtomicPtr<T> {
     const DEFAULT: Self = Self::new(core::ptr::null_mut());
 }
